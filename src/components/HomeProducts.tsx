@@ -1,35 +1,27 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import useSWR from "swr";
 import ProductCard from "./ProductCard";
 import { useRouter } from "next/navigation";
 import { ProductCardSkeleton } from "./Skeleton";
+import type { Product } from "@/types/product";
+
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch home products");
+  }
+
+  return response.json();
+};
 
 const HomeProducts = () => {
   const router = useRouter();
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('/api/products')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          const uniqueCategories = new Map();
-          data.forEach(product => {
-            if (!uniqueCategories.has(product.category)) {
-              uniqueCategories.set(product.category, product);
-            }
-          });
-          setProducts(Array.from(uniqueCategories.values()));
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error fetching products:', err);
-        setLoading(false);
-      });
-  }, []);
+  const { data: products = [], isLoading: loading } = useSWR<Product[]>(
+    "/api/home-products",
+    fetcher
+  );
 
   return (
     <div className="flex flex-col items-center pt-10 sm:pt-12 md:pt-14 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
