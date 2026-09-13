@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import ProductCard from "@/components/ProductCard";
 import { ProductDetailSkeleton } from "@/components/Skeleton";
 import type { Product } from "@/types/product";
@@ -27,6 +28,7 @@ export default function ProductPage() {
   const { data: featured = [] } = useSWR<Product[]>("/api/products", fetcher);
 
   const { addItem } = useCart();
+  const { wishlistIds, toggleWishlist, isUpdating } = useWishlist();
 
   const [mainImage, setMainImage] = useState<string | null>(null);
 
@@ -46,6 +48,8 @@ export default function ProductPage() {
     product.offerPrice && product.offerPrice > 0
       ? product.offerPrice
       : product.price;
+  const isWishlisted = wishlistIds.has(product._id);
+  const wishlistPending = isUpdating(product._id);
 
   return (
     <>
@@ -151,7 +155,7 @@ export default function ProductPage() {
             </table>
 
             {/* Buttons */}
-            <div className="flex gap-4 mt-10">
+            <div className="flex flex-wrap gap-4 mt-10">
               <button
                 onClick={() => addItem({
                   productId: product._id,
@@ -179,6 +183,17 @@ export default function ProductPage() {
                 className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition"
               >
                 Buy now
+              </button>
+              <button
+                onClick={() => void toggleWishlist(product)}
+                disabled={wishlistPending}
+                aria-pressed={isWishlisted}
+                className={`inline-flex w-full items-center justify-center gap-2 border py-3.5 transition disabled:cursor-wait disabled:opacity-60 sm:w-auto sm:px-5 ${isWishlisted ? "border-rose-200 bg-rose-50 text-rose-600" : "border-slate-200 text-slate-700 hover:border-orange-300 hover:text-orange-700"}`}
+              >
+                <svg className="h-5 w-5" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+                </svg>
+                {wishlistPending ? "Updating..." : isWishlisted ? "Saved" : "Add to Wishlist"}
               </button>
             </div>
 

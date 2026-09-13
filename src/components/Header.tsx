@@ -1,9 +1,9 @@
 "use client";
-
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -15,20 +15,36 @@ const navLinks = [
   { href: "/admin-login", label: "Seller Dashboard" },
 ];
 
+type StoredUser = { _id: string; name: string; email: string; phone: string };
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { cartCount } = useCart();
+  const { items: wishlistItems } = useWishlist();
   const router = useRouter();
 
-  const [user, setUser] = useState<any>(null);
-
+  const [user, setUser] = useState<StoredUser | null>(null);
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    const syncUser = () => {
+      const stored = localStorage.getItem("user");
+      try {
+        setUser(stored ? JSON.parse(stored) as StoredUser : null);
+      } catch {
+        setUser(null);
+      }
+    };
+    const timer = window.setTimeout(syncUser, 0);
+    window.addEventListener("auth-change", syncUser);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("auth-change", syncUser);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    window.dispatchEvent(new Event("auth-change"));
+    void fetch("/api/logout", { method: "POST" });
     router.push("/login");
   };
 
@@ -70,6 +86,15 @@ export default function Header() {
                 </span>
               )}
             </Link>
+
+            {user && (
+              <Link href="/wishlist" aria-label="Wishlist" className="relative rounded-full p-2 transition-all duration-200 hover:bg-rose-50 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
+                <svg className="h-6 w-6 " fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+                </svg>
+                {wishlistItems.length > 0 && <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-xs px-1.5 rounded-full">{wishlistItems.length}</span>}
+              </Link>
+            )}
 
             {/* User auth */}
             {user ? (
@@ -115,6 +140,8 @@ export default function Header() {
             <Link href="/cart" onClick={() => setMobileMenuOpen(false)}>
               Cart ({cartCount})
             </Link>
+
+            {user && <Link href="/wishlist" onClick={() => setMobileMenuOpen(false)}>Wishlist ({wishlistItems.length})</Link>}
 
             {user ? (
               <button onClick={handleLogout} className="text-red-600 text-left">

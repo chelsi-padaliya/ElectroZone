@@ -28,6 +28,7 @@ export default function Login() {
 
     if (data.success) {
       localStorage.setItem("user", JSON.stringify(data.user));
+      window.dispatchEvent(new Event("auth-change"));
       router.push("/cart");
     } else {
       alert(data.message || "Invalid login");

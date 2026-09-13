@@ -2,6 +2,7 @@ import connectDB from "@/lib/db";
 import User from "@/models/User";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { createSessionToken, sessionCookie } from "@/lib/session";
 
 export async function POST(req: Request) {
   try {
@@ -34,7 +35,7 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       user: {
         _id: user._id,
@@ -43,6 +44,8 @@ export async function POST(req: Request) {
         phone: user.phone,
       },
     });
+    response.cookies.set(sessionCookie.name, createSessionToken(user._id.toString()), sessionCookie.options);
+    return response;
 
   } catch (error) {
     console.error("LOGIN ERROR:", error);
