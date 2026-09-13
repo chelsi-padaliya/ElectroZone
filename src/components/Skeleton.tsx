@@ -1,8 +1,8 @@
 export const ProductCardSkeleton = () => (
-  <div className="animate-pulse">
-    <div className="bg-gray-200 rounded-lg h-48 mb-3" />
-    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-    <div className="h-3 bg-gray-200 rounded w-1/2" />
+  <div aria-label="Loading product" role="status">
+    <div className="skeleton-shimmer bg-[linear-gradient(110deg,#e5e7eb,45%,#f8fafc,55%,#e5e7eb)] rounded-xl h-52 mb-3" />
+    <div className="skeleton-shimmer bg-[linear-gradient(110deg,#e5e7eb,45%,#f8fafc,55%,#e5e7eb)] h-4 rounded w-3/4 mb-2" />
+    <div className="skeleton-shimmer bg-[linear-gradient(110deg,#e5e7eb,45%,#f8fafc,55%,#e5e7eb)] h-3 rounded w-1/2" />
   </div>
 );
 

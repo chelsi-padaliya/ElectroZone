@@ -16,3 +16,25 @@ body {
 .font-display {
   font-family: var(--font-display);
 }
+
+/* Shared interaction language. Transform/opacity animations stay performant. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter { animation: page-enter 360ms ease-out both; }
+  .skeleton-shimmer { background-size: 200% 100%; animation: shimmer 1.5s linear infinite; }
+}
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

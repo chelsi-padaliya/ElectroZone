@@ -39,7 +39,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link href="/" className="font-bold text-xl sm:text-2xl">
+          <Link href="/" className="font-bold text-xl sm:text-2xl rounded transition-transform duration-200 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
             Electro<span className="text-orange-600">Zone</span>
           </Link>
 
@@ -49,7 +49,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-600 hover:text-orange-600"
+                className="relative py-2 text-gray-600 transition-colors duration-200 hover:text-orange-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-orange-600 after:transition-[width] after:duration-200 hover:after:w-full focus-visible:outline-none focus-visible:text-orange-600"
               >
                 {link.label}
               </Link>
@@ -60,7 +60,7 @@ export default function Header() {
           <div className="flex items-center gap-3">
 
             {/* Cart */}
-            <Link href="/cart" className="relative p-2">
+            <Link href="/cart" aria-label="Shopping cart" className="relative rounded-full p-2 transition-all duration-200 hover:bg-orange-50 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
               <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
@@ -75,12 +75,12 @@ export default function Header() {
             {user ? (
               <button
                 onClick={handleLogout}
-                className="hidden sm:block px-3 py-1 text-red-600 border rounded text-sm"
+                className="hidden sm:block px-3 py-1 text-red-600 border rounded text-sm transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
               >
                 Logout
               </button>
             ) : (
-              <Link href="/login" className="hidden sm:block px-3 py-1 border rounded text-sm">
+              <Link href="/login" className="hidden sm:block px-3 py-1 border border-orange-200 rounded text-sm text-orange-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-600 hover:bg-orange-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                 Login
               </Link>
             )}
@@ -88,7 +88,9 @@ export default function Header() {
             {/* Mobile toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-2xl"
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
+              className="lg:hidden rounded p-1 text-2xl transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
             >
               ☰
             </button>
@@ -97,14 +99,14 @@ export default function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden flex flex-col gap-2 py-4 border-t">
+          <div className="lg:hidden flex flex-col gap-2 py-4 border-t page-enter">
 
             {navLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-600"
+                className="rounded px-2 py-1.5 text-gray-600 transition-colors hover:bg-orange-50 hover:text-orange-600"
               >
                 {link.label}
               </Link>

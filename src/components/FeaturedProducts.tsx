@@ -33,18 +33,18 @@ const FeaturedProduct = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 xl:gap-14 mt-8 sm:mt-10 md:mt-12 px-4 sm:px-6 md:px-10 lg:px-14">
         {products.map(({ id, image, title, description }) => (
-          <div key={id} className="relative group">
+          <div key={id} className="relative group overflow-hidden rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <Image
               src={image}
               alt={title}
-              className="group-hover:brightness-75 transition duration-300 w-full h-auto object-cover"
+              className="group-hover:brightness-75 group-hover:scale-105 transition duration-500 w-full h-auto object-cover"
             />
             <div className="group-hover:-translate-y-4 transition duration-300 absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8 text-white space-y-1 sm:space-y-2">
               <p className="font-medium text-lg sm:text-xl lg:text-2xl">{title}</p>
               <p className="text-xs sm:text-sm lg:text-base leading-4 sm:leading-5 max-w-48 sm:max-w-60">
                 {description}
               </p>
-              <button className="flex items-center gap-1.5 bg-orange-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded text-sm sm:text-base">
+              <button className="flex items-center gap-1.5 bg-orange-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded text-sm sm:text-base transition-transform active:scale-95">
                 Buy now <Image className="h-2.5 w-2.5 sm:h-3 sm:w-3" src={assets.redirect_icon} alt="Redirect Icon" />
               </button>
             </div>

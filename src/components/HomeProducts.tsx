@@ -43,7 +43,7 @@ const HomeProducts = () => {
           ))
         )}
       </div>
-      <button onClick={() => { router.push('/all-products') }} className="px-8 sm:px-10 md:px-12 py-2 sm:py-2.5 border rounded text-sm sm:text-base text-gray-500/70 hover:bg-slate-50/90 transition">
+      <button onClick={() => { router.push('/all-products') }} className="px-8 sm:px-10 md:px-12 py-2 sm:py-2.5 border rounded text-sm sm:text-base text-gray-500/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-600 hover:bg-orange-600 hover:text-white active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
         See more
       </button>
     </div>

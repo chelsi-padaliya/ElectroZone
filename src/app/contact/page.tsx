@@ -27,8 +27,8 @@ export default function ContactPage() {
       <Header />
       <main className="min-h-screen bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-10 sm:py-12 md:py-16">
-          <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8">
-            Contact <span className="text-orange-600">Us</span>
+          <h1 className="mb-6 text-left text-3xl font-bold sm:mb-8 sm:text-4xl">
+            Contact Us
           </h1>
 
           <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
